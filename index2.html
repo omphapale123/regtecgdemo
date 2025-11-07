@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OffshoreBrücke – REGTECH Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue-dark: #001f3f;
+      --blue-light: #0047ab;
+      --orange: #ff8c00;
+      --text-light: #f4f6f8;
+      --bg-gradient: linear-gradient(180deg, #000b1d, #011533 80%);
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-light);
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.4);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255, 140, 0, 0.3);
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--orange);
+    }
+
+    .flags img {
+      width: 28px;
+      height: 18px;
+      margin-left: 10px;
+      border-radius: 2px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.4);
+    }
+
+    main {
+      text-align: center;
+      padding: 120px 20px 40px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--orange);
+      margin-bottom: 15px;
+    }
+
+    input, select {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: 1px solid var(--orange);
+      background: rgba(255,255,255,0.05);
+      color: var(--text-light);
+      width: 250px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: var(--orange);
+      color: #011024;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #ffad33;
+      transform: scale(1.05);
+    }
+
+    .info-box {
+      margin-top: 30px;
+      background: rgba(255,255,255,0.06);
+      border-left: 3px solid var(--orange);
+      padding: 20px;
+      border-radius: 8px;
+      text-align: left;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Loading Page */
+    #loadingPage {
+      display: none;
+      text-align: center;
+      padding: 120px 20px;
+    }
+
+    .progress-bar {
+      width: 80%;
+      height: 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      margin: 30px auto;
+      overflow: hidden;
+    }
+
+    .progress {
+      width: 0%;
+      height: 100%;
+      background: var(--orange);
+      border-radius: 10px;
+      transition: width 10s linear;
+    }
+
+    .fact {
+      margin-top: 20px;
+      font-size: 1rem;
+      color: #ddd;
+      animation: fadeIn 1s ease;
+    }
+
+    /* Result Page */
+    #resultPage {
+      display: none;
+      padding: 120px 20px;
+      text-align: center;
+    }
+
+    .company-list {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.05);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255,140,0,0.2);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .company-card {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,140,0,0.3);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 12px;
+      text-align: left;
+      transition: transform 0.3s;
+    }
+
+    .company-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .tag {
+      background: var(--orange);
+      color: #001f3f;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      margin-left: 10px;
+    }
+
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">OffshoreBrücke | REGTECH Demo</div>
+    <div class="flags">
+      <img src="https://flagcdn.com/w20/de.png" alt="Germany Flag">
+      <img src="https://flagcdn.com/w20/in.png" alt="India Flag">
+    </div>
+  </header>
+
+  <!-- FIRST PAGE -->
+  <main id="inputPage">
+    <h1>Trust Score Simulation</h1>
+    <input type="text" id="companyName" placeholder="Enter your company name"><br>
+    <select id="industry">
+      <option value="">Select Industry</option>
+      <option>Mechanical Engineering</option>
+      <option>Chemicals & Plastics</option>
+      <option>Textiles</option>
+      <option>Electricals & Electronics</option>
+      <option>Construction</option>
+      <option>Pharmaceuticals</option>
+      <option>Automotive</option>
+    </select><br>
+    <button onclick="startLoading()">Generate best choice</button>
+
+    <div class="info-box">
+   <h3>🔍 How Trust Scoring Works</h3>
+      
+      <div class="info-item">
+        <div class="info-icon">📄</div>
+        <div class="info-text">
+          Each company is evaluated using <span class="highlight">30+ transparency and compliance metrics</span> — including audit history, certifications, and verified partner data.
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon">🌍</div>
+        <div class="info-text">
+          Our AI compares company data to <span class="highlight">EU–India trade and compliance benchmarks</span>, identifying export-ready firms.
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon"⚙️</div>
+        <div class="info-text">
+          Businesses with <span class="highlight">TÜV, ISO, or regulatory certifications</span> score higher, while incomplete or inconsistent data lowers trust scores.
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon">⭐</div>
+        <div class="info-text">
+          Final <b>Trust Scores (1–10)</b> reflect transparency, documentation credibility, and long-term reliability — highlighting <span class="highlight">“Offshore Choice”</span> partners.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- LOADING PAGE -->
+  <div id="loadingPage">
+    <h1>Analyzing Trade Trustworthiness...</h1>
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+    <div class="fact" id="factText">EU–India trade surpasses $158 billion, led by SMEs.</div>
+  </div>
+
+  <!-- RESULT PAGE -->
+  <div id="resultPage">
+    <h1>Top Matching Companies</h1>
+    <div class="company-list" id="companyList"></div>
+  </div>
+
+  <script>
+    const facts = [
+      "EU–India trade surpasses $158 billion, led by SMEs.",
+      "Germany is India’s largest trading partner in Europe.",
+      "The EU is India’s 2nd largest export destination.",
+      "OffshoreBrücke helps SMEs build cross-border trust.",
+      "TÜV-certified partners gain higher reliability ratings."
+    ];
+    let companies = [];
+   
+
+     fetch("plastic_filtered.json")
+     .then(response => response.json())
+     .then(data => {
+    // Randomly pick 5–8 companies
+     const shuffled = data.sort(() => 0.5 - Math.random());
+     companies = shuffled.slice(0, 8).map(item => ({
+      name: item["Directory Company"],
+      email: item.Email,
+      mobile: item.Mobile,
+      score: item.Score,
+      country: item.Country,
+      state: item.State
+    }));
+  })
+  .catch(err => console.error("Error loading company data:", err));
+
+    function startLoading() {
+      const name = document.getElementById("companyName").value.trim();
+      const industry = document.getElementById("industry").value;
+      if (!name || !industry) {
+        alert("Please enter company name and select industry.");
+        return;
+      }
+      document.getElementById("inputPage").style.display = "none";
+      document.getElementById("loadingPage").style.display = "block";
+
+      const progress = document.getElementById("progress");
+      let width = 0;
+      const interval = setInterval(() => {
+        width += 1;
+        progress.style.width = width + "%";
+        if (width % 20 === 0) {
+          const factIndex = Math.floor(Math.random() * facts.length);
+          document.getElementById("factText").innerText = facts[factIndex];
+        }
+        if (width >= 100) {
+          clearInterval(interval);
+          showResults();
+        }
+      }, 100);
+    }
+
+    function showResults() {
+      document.getElementById("loadingPage").style.display = "none";
+      document.getElementById("resultPage").style.display = "block";
+
+      const listDiv = document.getElementById("companyList");
+      listDiv.innerHTML = "";
+      const topScore = Math.max(...companies.map(c => c.score));
+
+      companies.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "company-card";
+        div.innerHTML = `
+          <b>${c.name}</b> ${c.score === topScore ? '<span class="tag">Offshore Choice ⭐</span>' : ''}
+          <br>Country: ${c.country}
+          <br>State: ${c.state}
+          <br>Score: ${c.score}/10
+          <br>Mobile: ${c.mobile}
+          <br>Email: ${c.email}
+        `;
+        listDiv.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
